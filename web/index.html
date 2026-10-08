@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#67549a">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="3D生成">
   <title>3Dモデル生成</title>
@@ -26,16 +26,15 @@
       <p id="source-review" class="notice" aria-live="polite">生成Pythonは公開前・実行前に内容を確認してください。</p>
     </section>
     <section class="panel">
-      <h2>2. GitHubに保存して生成</h2>
-      <p class="help">GitHubの限定権限トークンをその場で入力します。<strong>トークンは保存しません。</strong> 無料のGitHub Pagesだけで操作するための暫定方式です。</p>
-      <label class="field-label" for="github-token">Fine-grained personal access token</label>
-      <input id="github-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_...">
-      <p class="help">対象：<code>miumiu73my-beep/uchi-no-ko-3d-test</code> のみ。権限は Contents（読取/書込）・Actions（読取/書込）。トークンをGitHubのコードへ埋め込みません。</p>
-      <button id="build-button" class="primary">Pythonを保存 → Blenderで生成</button>
-      <button id="refresh-button" class="secondary">最新の実行を確認</button>
-      <p id="build-status" class="status" aria-live="polite">まだ実行していません。</p>
-      <p><a id="run-link" target="_blank" rel="noopener noreferrer" hidden>GitHubで実行履歴・Artifactsを開く ↗</a></p>
-      <p><a href="https://github.com/miumiu73my-beep/uchi-no-ko-3d-test/actions/workflows/build-model.yml" target="_blank" rel="noopener noreferrer">GitHub Actionsを手動で開く ↗</a></p>
+      <h2>2. GitHubで保存して自動生成</h2>
+      <p class="help">トークンは不要です。SafariなどでログインしているGitHubの編集画面を使います。GitHubアプリやChatGPTの連携情報をPWAに渡す必要はありません。</p>
+      <button id="copy-button" class="secondary" type="button">① Python全文をコピー</button>
+      <button id="edit-button" class="primary" type="button">② GitHubの編集画面を開く ↗</button>
+      <p class="help">開いたGitHubで <code>pipeline/generated/model.py</code> の既存コードをすべて選択して置き換え、<strong>Commit changes</strong> から <code>main</code> へ保存してください。</p>
+      <p class="help">保存されるとGitHub Actionsが自動でBlenderを実行します（コードが変わらなかった場合は実行されません）。途中でファイル名・保存先を変えないでください。</p>
+      <p id="build-status" class="status" aria-live="polite">まだ操作していません。</p>
+      <p><a href="https://github.com/miumiu73my-beep/uchi-no-ko-3d-test/actions/workflows/build-model.yml" target="_blank" rel="noopener noreferrer">③ GitHub Actionsの実行結果・Artifactsを開く ↗</a></p>
+      <p class="help">GitHubの画面がアプリへ切り替わって編集できない場合は、SafariでGitHubを開いてログインし、対象ファイルの鉛筆アイコンから編集してください。</p>
     </section>
     <section class="panel">
       <h2>3. PNGで結果を見る</h2>
@@ -46,7 +45,7 @@
       <p class="help">GLBはArtifactsから保存し、Nomad Sculptで開いてください。</p>
     </section>
     <footer>
-      <p>オフラインでも画面とローカルPNG表示は利用できます。GitHubへの保存・Blender実行・成果物取得には通信が必要です。</p>
+      <p>オフラインでも画面とローカルPNG表示は利用できます。GitHubへの保存・Blender実行・成果物取得には通信が必要です。GitHubへの保存はログイン済みブラウザーで手動操作します。</p>
       <p>V8など既存の成果物は、このアプリから自動削除・変更しません。</p>
     </footer>
   </main>
