@@ -1,51 +1,49 @@
-# 3Dモデル生成 PWA
+# 3Dモデル生成PWA — GitHubログイン利用版
 
-iPad / iPhone の Safari から、Google Gemmaで作ったBlender PythonをプライベートなGitHubリポジトリへ送信し、GitHub ActionsでGLBと確認用PNGを生成する個人用PWAです。
+iPad / iPhone向け。Gemmaが生成したBlender用Pythonを、GitHubのWeb編集画面で保存することで、GitHub ActionsがGLB・BLEND・確認用PNGを自動生成します。
 
-## 安全な分離
-- **このリポジトリ（Public）** は PWA のHTML・CSS・JavaScriptとPWAビルド用ワークフローのみを公開します。
-- **uchi-no-ko-3d-test（Private）** に座標データ、造形Python、Blender実行ワークフロー、GLB・PNGを保持します。PrivateリポジトリをPublicに変更する必要はありません。
-- 認証用のPersonal Access Token（PAT）は実行中に一時入力します。HTML/JSに固定記述したり、端末に永続保存したりしません。リロード時は再入力になります。
-- 画面自体は公開されます。PATを知らない第三者はPrivateリポジトリの内容を読み取ったり書き込んだりできません。
-- **ただしPATをブラウザーに入力する方式にはリスクがあります。** 信頼できるGitHub PagesのURLでのみ使用し、短い有効期限・最小権限のトークンを使い、利用しないときはGitHub側で失効してください。生成Pythonも実行前にレビューしてください。
+## 公開先と非公開データ
+- PWA画面（Public）：[uchi-3d-pwa](https://github.com/miumiu73my-beep/uchi-3d-pwa)
+- 生成処理とモデルファイル（Private）：`uchi-no-ko-3d-test`
+- 一歌V8等の既存制作資料はPublicへ移しません。
 
-## 最初のGitHub Pages公開
-1. このリポジトリの **Settings → Pages** を開き、**Build and deployment → Source** を **GitHub Actions** に変更します。
-2. **Actions → Build 3D PWA** の最新実行が緑か確認します。必要なら **Run workflow** で再実行します。
-3. Pagesデプロイが成功すれば、公開先は **https://miumiu73my-beep.github.io/uchi-3d-pwa/** です。
-4. iPadのSafariで開き、共有メニューの **ホーム画面に追加** からPWAとして登録できます。
-5. スマートフォン上で一度ネット接続して読み込めば、画面本体はオフラインでも開けます。ただし新規のBlender生成とGitHub APIの利用にはインターネット接続が必要です。
+## 認証方法（追加トークン不要）
 
-## GitHub認証（暫定）
-GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens で発行します。
+**iPhone/iPad用のGitHubアプリやChatGPTのGitHub連携は、PWAのGitHub API認証に直接使えません。**
 
-- Resource owner: **miumiu73my-beep**
-- Repository access: **Only select repositories → uchi-no-ko-3d-test**
-- Repository permissions: **Contents: Read and write**, **Actions: Read and write**
-- Expiration: できれば短期間（例：7日）
+現行版では代わりにGitHub Web版（Safari等）にログインし、GitHubの編集画面から保存します。PWAはGitHubトークン・パスワード・秘密鍵を要求せず、コード内にも含みません。
 
-PATをコード・README・チャットに貼り付けないでください。公開PWAには、GitHub APIに対して実行時にのみ入力して使用します。
+1. [PWA](https://miumiu73my-beep.github.io/uchi-3d-pwa/) を開く。
+2. Gemmaから受け取った`model.py` / `.txt` を選ぶか、Python全文を貼る。
+3. 内容を確認し **「① Python全文をコピー」** を押す。
+4. **「② GitHubの編集画面を開く」** を押す。Safari側でGitHubにログイン済みであれば認証が引き継がれます。GitHubアプリへの切替で編集できない場合、Safariで直接ファイルを開いて鉛筆アイコンから編集してください。
+5. Privateリポジトリの `pipeline/generated/model.py` で既存の全文を置き換え、**Commit changes** から **main** ブランチへ保存する。
+6. Privateリポジトリの[Build 3D model](https://github.com/miumiu73my-beep/uchi-no-ko-3d-test/actions/workflows/build-model.yml)を開く。**model.py に変更を加えたコミット**を検出すると、Blenderが自動実行されます。コードに差分がなければ実行は開始しません（Actions画面から手動実行できます）。
+7. 緑のチェックが表示されたら、実行履歴のArtifactsから `generated-3d-model` をダウンロード。GLBはNomad Sculptで開けます。
+8. 取得したPNGをPWAの「PNGで結果を見る」から選べば端末内でプレビューできます。
 
-## 使い方
-1. Gemmaが生成した `build_model()` を持つPython全文を、`model.py` または `.txt` として選択（またはテキスト欄へ貼り付け）。
-2. Pythonを目視で確認してからPATを入力。
-3. **Pythonを保存 → Blenderで生成** を押す。
-4. 実行ページのArtifactsから `generated-3d-model` をダウンロード。PNGとGLB・BLENDを確認。
-5. PNGはPWAのプレビュー欄へ複数選択して表示できます。GLBはNomad Sculptなどで開けます。
+## セキュリティ上の注意
+- Gemmaが生成したPythonはGitHub Actionsで実行されます。**必ずコードを確認してからcommit**してください。PWAにある簡易チェックは安全性を保証しません。
+- 「Commit changes」後に自動でモデル生成が始まるので、意図しないコード変更を保存しないよう注意してください。
+- 公開PWAからPrivateリポジトリのファイルは読み取りません。GitHub上で必要な操作をユーザー自身が行います。
+- Cloudflareや独自の認証サーバーは使っていません。完全なワンボタン実行にはGitHub OAuthと安全な認証バックエンドなど、別の構成が必要です。
 
-## 実装と制限
-- `web/` は Vanilla JavaScript・Vite・vite-plugin-pwa によるPWAです。
-- `.github/workflows/build-pwa.yml` がビルドし、GitHub Pagesに公開します。
-- 画像から座標JSONを抽出する処理はPWAには含まれません。画像・設定文をGemmaへ渡す手順は別途実施してください。
-- 初期版ではArtifactsの自動取得・GLBのアプリ内表示・GitHub認証の自動化は未対応です。
-- **CodespacesおよびCloudflareはPWA利用時に不要**です。
-- PrivateリポジトリのActionsに投入するGemma生成Pythonは、任意コードとして実行されるため、安全と断定しないでください。
+## 技術構成
+- Vanilla JS / Vite / vite-plugin-pwa のオフライン対応UI
+- GitHub Pagesで公開
+- Privateリポジトリの `pipeline/generated/model.py` の保存を `push.paths` で検出し、GitHub ActionsでBlenderを実行
+- `pipeline/run_pipeline.py` が `model.glb`, `model.blend`, 複数のPNGを出力
 
-## ローカル開発（必要になった場合）
-```bash
-cd web
-npm install
-npm run build
-```
+## 動作チェック
+- [ ] Public PWAにPAT入力欄がない
+- [ ] Python全文をコピーできる
+- [ ] GitHub Webの編集画面を開ける
+- [ ] Privateのmodel.pyだけを更新してmainへ保存できる
+- [ ] Build 3D modelが自動起動する
+- [ ] ArtifactsからGLBとPNGを取得できる
 
-このリポジトリの `web/` 以外に Private 制作データを追加しないでください。
+## 将来の改善
+- GitHub Appを開発者設定で登録し、適切なバックエンド経由でOAuth認証することでWeb編集の手間を削減
+- ArtifactのPWA内ダウンロード、GLBプレビュー、生成物の履歴管理
+
+GitHub PagesのHTMLとPWAキャッシュはオフライン表示可能ですが、GitHubへの保存やBlenderの生成にはネット接続が必要です。
