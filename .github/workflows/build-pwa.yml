@@ -1,0 +1,74 @@
+name: Build 3D PWA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - '.github/workflows/build-pwa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        working-directory: web
+        run: npm install --no-audit --no-fund
+
+      - name: Build PWA
+        working-directory: web
+        run: npm run build
+
+      - name: Save build as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3d-pwa-dist
+          path: web/dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    # GitHub Free supports Pages on public repositories; never publish a private repo automatically.
+    if: ${{ github.event.repository.private == false }}
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download PWA build
+        uses: actions/download-artifact@v4
+        with:
+          name: 3d-pwa-dist
+          path: public-pwa/
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public-pwa/
+
+      - name: Publish PWA
+        id: deployment
+        uses: actions/deploy-pages@v4

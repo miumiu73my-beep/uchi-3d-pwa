@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#67549a">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="3D生成">
+  <title>3Dモデル生成</title>
+</head>
+<body>
+  <main class="app">
+    <header class="page-header">
+      <div class="brand"><span class="brand-icon">⬡</span><div><h1>3Dモデル生成</h1><p>GitHub Actions × Blender</p></div></div>
+      <span id="connection" class="network-status" aria-live="polite">接続確認中</span>
+    </header>
+    <section class="panel">
+      <h2>1. Pythonを選択</h2>
+      <p class="help">Gemmaが出力した <code>model.py</code> または <code>.txt</code> を読み込みます。ファイルは選択しただけではGitHubに送信されません。</p>
+      <label class="upload-label" for="source-file">ファイルを選択</label>
+      <input type="file" id="source-file" accept=".py,.txt,text/plain,text/x-python">
+      <span id="source-name" class="source-name">未選択</span>
+      <label class="field-label" for="python-source">Python全文（編集できます）</label>
+      <textarea id="python-source" spellcheck="false" placeholder="ファイルを選択するか、Python全文を貼り付けてください" rows="7"></textarea>
+      <p id="source-review" class="notice" aria-live="polite">生成Pythonは公開前・実行前に内容を確認してください。</p>
+    </section>
+    <section class="panel">
+      <h2>2. GitHubに保存して生成</h2>
+      <p class="help">GitHubの限定権限トークンをその場で入力します。<strong>トークンは保存しません。</strong> 無料のGitHub Pagesだけで操作するための暫定方式です。</p>
+      <label class="field-label" for="github-token">Fine-grained personal access token</label>
+      <input id="github-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_...">
+      <p class="help">対象：<code>miumiu73my-beep/uchi-no-ko-3d-test</code> のみ。権限は Contents（読取/書込）・Actions（読取/書込）。トークンをGitHubのコードへ埋め込みません。</p>
+      <button id="build-button" class="primary">Pythonを保存 → Blenderで生成</button>
+      <button id="refresh-button" class="secondary">最新の実行を確認</button>
+      <p id="build-status" class="status" aria-live="polite">まだ実行していません。</p>
+      <p><a id="run-link" target="_blank" rel="noopener noreferrer" hidden>GitHubで実行履歴・Artifactsを開く ↗</a></p>
+      <p><a href="https://github.com/miumiu73my-beep/uchi-no-ko-3d-test/actions/workflows/build-model.yml" target="_blank" rel="noopener noreferrer">GitHub Actionsを手動で開く ↗</a></p>
+    </section>
+    <section class="panel">
+      <h2>3. PNGで結果を見る</h2>
+      <p class="help">GitHubのArtifactsを解凍して、PNGをまとめて選択してください。プレビューは端末内だけで処理します。</p>
+      <label class="upload-label" for="preview-files">PNGを選択（複数可）</label>
+      <input type="file" id="preview-files" accept="image/png" multiple>
+      <div class="gallery" id="gallery"><p class="help">まだ画像がありません。</p></div>
+      <p class="help">GLBはArtifactsから保存し、Nomad Sculptで開いてください。</p>
+    </section>
+    <footer>
+      <p>オフラインでも画面とローカルPNG表示は利用できます。GitHubへの保存・Blender実行・成果物取得には通信が必要です。</p>
+      <p>V8など既存の成果物は、このアプリから自動削除・変更しません。</p>
+    </footer>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
