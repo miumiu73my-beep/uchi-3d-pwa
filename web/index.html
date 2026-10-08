@@ -15,6 +15,33 @@
       <div class="brand"><span class="brand-icon">⬡</span><div><h1>3Dモデル生成</h1><p>GitHub Actions × Blender</p></div></div>
       <span id="connection" class="network-status" aria-live="polite">接続確認中</span>
     </header>
+    <section class="panel repo-overview" aria-labelledby="repo-overview-heading">
+      <h2 id="repo-overview-heading">使用するGitHubリポジトリ</h2>
+      <p class="help">PWAの公開先と、Blenderの実行・成果物の保存先は別です。</p>
+      <div class="repo-location repo-public">
+        <div class="repo-location-heading">
+          <strong>① PWAの公開・更新</strong>
+          <span class="repo-visibility">Public</span>
+        </div>
+        <p class="repo-name">miumiu73my-beep / <strong>uchi-3d-pwa</strong></p>
+        <p class="help">今開いているPWAのソースがあります。<strong>ここではBlenderを実行しません。</strong></p>
+        <a href="https://github.com/miumiu73my-beep/uchi-3d-pwa" target="_blank" rel="noopener noreferrer">PWAリポジトリを見る ↗</a>
+      </div>
+      <p class="repo-arrow" aria-hidden="true">↓ Pythonの保存・3Dモデル生成はこちら</p>
+      <div class="repo-location repo-private">
+        <div class="repo-location-heading">
+          <strong>② Python保存・Blender実行・成果物取得</strong>
+          <span class="repo-visibility">Private</span>
+        </div>
+        <p class="repo-name">miumiu73my-beep / <strong>uchi-no-ko-3d-test</strong></p>
+        <p class="help">保存先：<code>pipeline/generated/model.py</code><br>実行するActions：<strong>Build 3D model</strong></p>
+        <p class="repo-links">
+          <a href="https://github.com/miumiu73my-beep/uchi-no-ko-3d-test/edit/main/pipeline/generated/model.py" target="_blank" rel="noopener noreferrer">Pythonを編集 ↗</a>
+          <a href="https://github.com/miumiu73my-beep/uchi-no-ko-3d-test/actions/workflows/build-model.yml" target="_blank" rel="noopener noreferrer">Actions・生成結果を開く ↗</a>
+        </p>
+      </div>
+      <p class="repo-results"><strong>GLB・PNGの受け取り場所：</strong><code>uchi-no-ko-3d-test</code> → Actions → <strong>Build 3D model</strong> → 実行履歴 → Artifacts → <code>generated-3d-model</code></p>
+    </section>
     <section class="panel">
       <h2>1. Pythonを選択</h2>
       <p class="help">Gemmaが出力した <code>model.py</code> または <code>.txt</code> を読み込みます。ファイルは選択しただけではGitHubに送信されません。</p>
@@ -26,14 +53,14 @@
       <p id="source-review" class="notice" aria-live="polite">生成Pythonは公開前・実行前に内容を確認してください。</p>
     </section>
     <section class="panel">
-      <h2>2. GitHubで保存して自動生成</h2>
+      <h2>2. Privateリポジトリに保存して自動生成</h2>
       <p class="help">トークンは不要です。SafariなどでログインしているGitHubの編集画面を使います。GitHubアプリやChatGPTの連携情報をPWAに渡す必要はありません。</p>
       <button id="copy-button" class="secondary" type="button">① Python全文をコピー</button>
-      <button id="edit-button" class="primary" type="button">② GitHubの編集画面を開く ↗</button>
+      <button id="edit-button" class="primary" type="button">② Privateリポジトリで編集 ↗</button>
       <p class="help">開いたGitHubで <code>pipeline/generated/model.py</code> の既存コードをすべて選択して置き換え、<strong>Commit changes</strong> から <code>main</code> へ保存してください。</p>
       <p class="help">保存されるとGitHub Actionsが自動でBlenderを実行します（コードが変わらなかった場合は実行されません）。途中でファイル名・保存先を変えないでください。</p>
       <p id="build-status" class="status" aria-live="polite">まだ操作していません。</p>
-      <p><a href="https://github.com/miumiu73my-beep/uchi-no-ko-3d-test/actions/workflows/build-model.yml" target="_blank" rel="noopener noreferrer">③ GitHub Actionsの実行結果・Artifactsを開く ↗</a></p>
+      <p><a href="https://github.com/miumiu73my-beep/uchi-no-ko-3d-test/actions/workflows/build-model.yml" target="_blank" rel="noopener noreferrer">③ PrivateリポジトリのActions・Artifactsを見る ↗</a></p>
       <p class="help">GitHubの画面がアプリへ切り替わって編集できない場合は、SafariでGitHubを開いてログインし、対象ファイルの鉛筆アイコンから編集してください。</p>
     </section>
     <section class="panel">
@@ -42,7 +69,7 @@
       <label class="upload-label" for="preview-files">PNGを選択（複数可）</label>
       <input type="file" id="preview-files" accept="image/png" multiple>
       <div class="gallery" id="gallery"><p class="help">まだ画像がありません。</p></div>
-      <p class="help">GLBはArtifactsから保存し、Nomad Sculptで開いてください。</p>
+      <p class="help">GLBは<strong>Private：uchi-no-ko-3d-test</strong> のActions → Artifactsから保存し、Nomad Sculptで開いてください。</p>
     </section>
     <footer>
       <p>オフラインでも画面とローカルPNG表示は利用できます。GitHubへの保存・Blender実行・成果物取得には通信が必要です。GitHubへの保存はログイン済みブラウザーで手動操作します。</p>
