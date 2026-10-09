@@ -42,6 +42,34 @@
       </div>
       <p class="repo-results"><strong>GLB・PNGの受け取り場所：</strong><code>uchi-no-ko-3d-test</code> → Actions → <strong>Build 3D model</strong> → 実行履歴 → Artifacts → <code>generated-3d-model</code></p>
     </section>
+    <section class="panel reprojection-panel" aria-labelledby="reproject-title">
+      <h2 id="reproject-title">座標JSONの再投影（Blenderの前に確認）</h2>
+      <p class="help">Step 3：Gemini等で作った座標JSONを、加工前の原画1枚に重ねて検証します。<strong>ここでは座標を取り直したり修正したりしません。</strong>画像とJSONは端末内だけで処理します。</p>
+      <div class="reproject-inputs">
+        <div>
+          <label class="upload-label" for="reproject-image">① 無加工の原画を選ぶ</label>
+          <input type="file" id="reproject-image" accept="image/png,image/jpeg,image/webp">
+          <p class="help">FRONT／SIDE／BACKの<strong>1視点だけ</strong>を切り出した原画。三面図全体ではありません。</p>
+        </div>
+        <div>
+          <label class="upload-label" for="reproject-json">② 同じ視点のJSONを選ぶ</label>
+          <input type="file" id="reproject-json" accept=".json,.txt,application/json,text/plain">
+          <p class="help">例：<code>front.json</code>。<code>image_size_px: null</code> でも、相対UVの<strong>仮表示</strong>は可能です。</p>
+        </div>
+      </div>
+      <div class="reproject-options">
+        <label><input type="checkbox" id="reproject-landmarks" checked> ランドマークを表示</label>
+        <label><input type="checkbox" id="reproject-labels" checked> 部位名を表示</label>
+      </div>
+      <p id="reproject-status" class="status" aria-live="polite">原画とJSONを選択すると、原画のピクセル上に座標を重ねます。</p>
+      <div id="reproject-preview-wrap" class="reproject-preview" hidden>
+        <canvas id="reproject-canvas" aria-label="元の画像にJSONの座標を重ねた再投影画像"></canvas>
+        <p class="help">色線と点が本来の輪郭上にあるかを目視してください。破線は一部推定・遮蔽ありの特徴です。</p>
+      </div>
+      <button type="button" class="secondary" id="reproject-download" disabled>③ 重ね合わせPNGを保存</button>
+      <p id="reproject-report" class="reproject-report" hidden></p>
+      <p class="help">注意：<code>image_size_px: null</code> のJSONは元絵の画素を実測できた証明ではありません。仮表示の結果がずれている場合はGeminiに座標を再計測させてください。画像サイズが明記されていて原画と一致しない場合は描画を停止します。</p>
+    </section>
     <section class="panel">
       <h2>1. Pythonを選択</h2>
       <p class="help">Gemmaが出力した <code>model.py</code> または <code>.txt</code> を読み込みます。ファイルは選択しただけではGitHubに送信されません。</p>
