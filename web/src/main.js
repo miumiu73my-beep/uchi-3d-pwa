@@ -1,5 +1,6 @@
 import './style.css';
 import { registerSW } from 'virtual:pwa-register';
+import { initReprojection } from './reprojection.js';
 
 const OWNER = 'miumiu73my-beep';
 const REPO = 'uchi-no-ko-3d-test';
@@ -23,6 +24,7 @@ function connectionStatus() {
 window.addEventListener('online', connectionStatus);
 window.addEventListener('offline', connectionStatus);
 connectionStatus();
+initReprojection();
 
 registerSW({
   onNeedRefresh() {
