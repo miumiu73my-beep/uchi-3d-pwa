@@ -15,3 +15,18 @@
 .repo-results { border-top: 1px solid #e8e1f2; margin: 14px 0 0; padding-top: 12px; font-size: .84rem; color: #554b67; line-height: 1.7; overflow-wrap: anywhere; }
 .repo-results code { background: #f1ecfa; border-radius: 4px; padding: 1px 3px; }
 @media(max-width:520px) { .repo-location-heading { align-items: flex-start; } .repo-location-heading strong { max-width: 77%; } }
+
+/* Client-only, unmodified-source UV re-projection preview */
+.reprojection-panel { border-color: #c5b6e2; }
+.reproject-inputs { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 14px 0 8px; }
+.reproject-inputs>div { padding: 12px; border: 1px solid #e2d9ef; border-radius: 12px; min-width: 0; background: #faf8ff; }
+.reproject-inputs .help { margin: 10px 0 0; font-size: .82rem; }
+.reproject-options { display:flex; align-items:center; flex-wrap:wrap; gap:16px; margin:14px 0; }
+.reproject-options label { cursor:pointer; font-size: .85rem; display:flex; align-items:center; gap:5px; }
+.reproject-preview { border:1px solid #e3dcec; background:#fff; margin:12px 0; border-radius:10px; padding:8px; }
+.reproject-preview[hidden], .reproject-report[hidden] { display:none; }
+.reproject-preview canvas { display:block; width:100%; max-width:100%; height:auto; }
+.reproject-preview .help { margin:8px 0 0; font-size:.76rem; }
+.reproject-report { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.5; font-size:.78rem; color:#655d74; padding:12px; background:#f6f3fb; border-radius:10px; }
+#reproject-download:disabled { opacity:.5; cursor:not-allowed; }
+@media(max-width:520px) { .reproject-inputs { grid-template-columns:1fr; } .reproject-inputs .upload-label { width:100%; text-align:center; } }
